@@ -34,16 +34,15 @@ module Miniserver
     def get_status_and_message
       return [NOT_ALLOWED_CODE, NOT_ALLOWED_MESSAGE] unless req.post?
 
-      not_acceptable_response = [NOT_ACCEPTABLE_CODE, NOT_ACCEPTABLE_MESSAGE]
-      return not_acceptable_response unless acceptable
-
-      bad_request_response = [BAD_REQUEST_CODE, BAD_REQUEST_MESSAGE]
-      return bad_request_response if bad_request
-
-      missing_params_response = [BAD_REQUEST_CODE, MISSING_PARAMS_MESSAGE]
-      return missing_params_response if missing_params
-
-      [OK_CODE, SUCCESSFUL_REQUEST_MESSAGE]
+      if !acceptable
+        [NOT_ACCEPTABLE_CODE, NOT_ACCEPTABLE_MESSAGE]
+      elsif bad_request
+        [BAD_REQUEST_CODE, BAD_REQUEST_MESSAGE]
+      elsif missing_params
+        [BAD_REQUEST_CODE, MISSING_PARAMS_MESSAGE]
+      else
+        [OK_CODE, SUCCESSFUL_REQUEST_MESSAGE]
+      end
     end
 
     def build_response(status:, message:)
